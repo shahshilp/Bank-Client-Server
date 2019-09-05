@@ -58,19 +58,29 @@ of clients using the bank server. Your client implementation should have two thr
 thread to read messages from the server and send them to the user. Having two threads allows the client
 to immediately print out to the user all messages from the server while the client is either waiting for
 the user to input a new command, or keeping the user from entering a command.
+
 d. Client/Server Command Syntax
 The command syntax allows the user to; create accounts, start sessions to serve specific accounts,
 and to exit the client process altogether:
+
 create <accountname (char) >
+
 serve <accountname (char) >
+
 deposit <amount (double) >
+
 withdraw <amount (double) >
+
 query
+
 end
+
 quit
+
 The client process will send commands to the bank, and the bank will send responses back to the
 client. Every messages the client sends to the server should result in a response from the server; either
 data, an error or a confirmation message.
+
 Create:
 The create command creates a new account for the bank. It is an error if the bank already has an
 account with the specified name or can not create the account for some reason. A client in a service
@@ -79,6 +89,7 @@ create new accounts. The name specified uniquely identifies the account. An acco
 most 255 characters. The initial balance of a newly created account is zero. It is only possible
 to create one new account at a time, no matter how many clients are currently connected to the
 server.
+
 Serve:
 The serve command starts a service session for a specific account. The deposit, withdraw,
 query and end commands are only valid in a service session. It is not possible to start more
@@ -87,20 +98,25 @@ sessions for different accounts in different client windows. Under no circumstan
 concurrent service sessions for the same account. Once a client ends (see below) a service session, they
 can start a new one for a different account or the same account, so it is possible to have any number of
 sequential service sessions from the same client.
+
 Deposit/Withdraw:
 The deposit and withdraw commands add and subtract amounts from an account balance.
 Amounts are specified as floating-point numbers. Both commands should result in an error if the client
 is not in a service session. There are no constraints on the size of a deposit, but a withdrawal is invalid
 if the requested amount exceeds the current balance for the account. Invalid withdrawal attempts
 leave the current balance unchanged.
+
 Query:
 The query command simply returns the current account balance.
+
 End:
 The end command ends the current service session. Once the service session is ended, it is possible
 to create new accounts or start a new service session.
+
 Quit:
 The quit command disconnects the client from the server and ends the client process. The server
 process should continue execution.
+
 e. Client/Server Start-up
 The client and server programs can be invoked in any order. Client processes that cannot find the
 server should repeatedly try to connect every 3 seconds until they find a server. The client must specify
